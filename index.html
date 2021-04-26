@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="yes" name="mobile-web-app-capable">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+</head>
+<body>
+  <p>VCV Rack WebSocket Demo</p>
+  <p id="connection">not connected</p>
+  <input placeholder="message to pd" id="sender"/>
+  <textarea id="receiver"></textarea>
+  <script type="text/javascript">
+    $ = document.getElementById.bind(document);
+    
+    var ws = new WebSocket("ws://localhost:9001/");
+    
+    ws.onopen = function() {
+      $("connection").innerHTML = "connected";
+    };
+    
+    /* when a message is received from Pd */
+    ws.onmessage = function(message) {
+      // console.log("message", message, message.data);
+      $("receiver").innerHTML = message.data + "\n";
+      //$("receiver").setAttribute("rows", $("receiver").innerHTML.split("\n").length - 1);
+    };
+    
+    ws.onclose = function() {
+      $("connection").innerHTML = "not connected";
+    };
+
+    /* when enter is pressed send the message to Pd */
+    $("sender").onkeydown = function(ev) {
+      if (ev.keyCode == 13) {
+        console.log($("sender").value);
+        ws.send($("sender").value);
+        $("sender").value = "";
+      }
+    }
+  </script>
+</body>
+</html>
