@@ -9,8 +9,14 @@
 <body>
   <p>VCV Rack WebSocket Demo</p>
   <p id="connection">not connected</p>
+  <p id="in1">in1</p>
+  <p id="in2">in2</p>
+  <p id="in3">in3</p>
+  <p id="in4">in4</p>
+  <p id="in5">in5</p>
+  <p id="in6">in6</p>
+  
   <input placeholder="message to pd" id="sender"/>
-  <textarea id="receiver"></textarea>
   <script type="text/javascript">
     $ = document.getElementById.bind(document);
     
@@ -23,8 +29,11 @@
     /* when a message is received from Pd */
     ws.onmessage = function(message) {
       // console.log("message", message, message.data);
-      $("receiver").innerHTML = message.data + "\n";
+      //$("receiver").innerHTML = message.data + "\n";
+
       //$("receiver").setAttribute("rows", $("receiver").innerHTML.split("\n").length - 1);
+      var res = message.data.split(" ");
+      $(res[0]).innerHTML = message.data + "\n";
     };
     
     ws.onclose = function() {
